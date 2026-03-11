@@ -47,3 +47,5 @@
 2026-03-11T08:59:55.083192Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
 2026-03-11T09:01:10.488415Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/web/next.config.mjs")}
 2026-03-11T09:01:10.491046Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("web"), path: AnchoredSystemPathBuf("apps/web") }}))
+2026-03-11T09:25:12.029762Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("package.json")}
+2026-03-11T09:25:12.030241Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(All)
