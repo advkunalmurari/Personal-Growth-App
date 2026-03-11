@@ -1,0 +1,108 @@
+{
+    "common": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "add": "Add",
+        "done": "Done",
+        "loading": "Loading...",
+        "error": "Something went wrong. Please try again.",
+        "success": "Success!",
+        "confirm": "Are you sure?"
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "goals": "Goals",
+        "tasks": "Tasks",
+        "habits": "Habits",
+        "schedule": "Schedule",
+        "focus": "Focus Mode",
+        "journal": "Journal",
+        "recovery": "Recovery",
+        "knowledge": "Knowledge",
+        "settings": "Settings",
+        "signOut": "Sign Out"
+    },
+    "dashboard": {
+        "greeting_morning": "Good morning",
+        "greeting_afternoon": "Good afternoon",
+        "greeting_evening": "Good evening",
+        "todayPlan": "Today's Plan",
+        "xpProgress": "XP Progress",
+        "level": "Level",
+        "streak": "Day Streak",
+        "tasksCompleted": "Tasks Completed",
+        "habitsLogged": "Habits Logged"
+    },
+    "tasks": {
+        "newTask": "New Task",
+        "priority": "Priority",
+        "dueDate": "Due Date",
+        "estimatedTime": "Estimated Time",
+        "markDone": "Mark as Done",
+        "noTasks": "No tasks for today. Add one to get started!",
+        "placeholder": "Task title..."
+    },
+    "habits": {
+        "newHabit": "New Habit",
+        "logHabit": "Log Habit",
+        "streak": "streak",
+        "noHabits": "No habits tracked yet. Build your first one!",
+        "frequency": "Frequency",
+        "daily": "Daily",
+        "weekly": "Weekly"
+    },
+    "goals": {
+        "newGoal": "New Goal",
+        "progress": "Progress",
+        "dueDate": "Target Date",
+        "noGoals": "No goals yet. Set your first goal!",
+        "category": "Category",
+        "milestone": "Milestone"
+    },
+    "focus": {
+        "startSession": "Start Focus Session",
+        "endSession": "End Session",
+        "timeRemaining": "Time Remaining",
+        "breakTime": "Take a Break",
+        "sessionsToday": "Sessions Today",
+        "totalFocusTime": "Total Focus Time",
+        "deepWork": "Deep Work Mode"
+    },
+    "coach": {
+        "title": "LOS Coach",
+        "subtitle": "Powered by Gemini",
+        "placeholder": "Ask your coach anything...",
+        "thinking": "Thinking...",
+        "greeting": "Hey! I'm your LOS Coach. I have full context of your goals, tasks, and habits. What would you like to optimize today?"
+    },
+    "pricing": {
+        "title": "Invest in Your Growth",
+        "subtitle": "Join thousands of high-performers running their life at full capacity.",
+        "monthly": "/month",
+        "yearly": "/year",
+        "getStarted": "Get Started",
+        "processing": "Processing...",
+        "guarantee": "7-day money-back guarantee"
+    },
+    "auth": {
+        "signIn": "Sign In",
+        "signUp": "Sign Up",
+        "email": "Email",
+        "password": "Password",
+        "forgotPassword": "Forgot Password?",
+        "noAccount": "Don't have an account?",
+        "haveAccount": "Already have an account?"
+    },
+    "settings": {
+        "profile": "Profile",
+        "language": "Language",
+        "notifications": "Notifications",
+        "privacy": "Privacy",
+        "exportData": "Export My Data",
+        "deleteAccount": "Delete Account",
+        "theme": "Theme",
+        "timezone": "Timezone"
+    }
+}

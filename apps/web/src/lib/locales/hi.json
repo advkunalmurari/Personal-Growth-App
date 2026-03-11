@@ -1,0 +1,108 @@
+{
+    "common": {
+        "save": "सहेजें",
+        "cancel": "रद्द करें",
+        "delete": "हटाएं",
+        "edit": "संपादित करें",
+        "add": "जोड़ें",
+        "done": "पूरा हुआ",
+        "loading": "लोड हो रहा है...",
+        "error": "कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
+        "success": "सफलता!",
+        "confirm": "क्या आप सुनिश्चित हैं?"
+    },
+    "nav": {
+        "dashboard": "डैशबोर्ड",
+        "goals": "लक्ष्य",
+        "tasks": "कार्य",
+        "habits": "आदतें",
+        "schedule": "शेड्यूल",
+        "focus": "फोकस मोड",
+        "journal": "डायरी",
+        "recovery": "रिकवरी",
+        "knowledge": "ज्ञान",
+        "settings": "सेटिंग्स",
+        "signOut": "साइन आउट"
+    },
+    "dashboard": {
+        "greeting_morning": "शुभ प्रभात",
+        "greeting_afternoon": "नमस्ते",
+        "greeting_evening": "शुभ संध्या",
+        "todayPlan": "आज की योजना",
+        "xpProgress": "XP प्रगति",
+        "level": "स्तर",
+        "streak": "लगातार दिन",
+        "tasksCompleted": "पूरे किए गए कार्य",
+        "habitsLogged": "दर्ज की गई आदतें"
+    },
+    "tasks": {
+        "newTask": "नया कार्य",
+        "priority": "प्राथमिकता",
+        "dueDate": "नियत तारीख",
+        "estimatedTime": "अनुमानित समय",
+        "markDone": "पूर्ण चिह्नित करें",
+        "noTasks": "आज के लिए कोई कार्य नहीं। शुरू करने के लिए एक जोड़ें!",
+        "placeholder": "कार्य का शीर्षक..."
+    },
+    "habits": {
+        "newHabit": "नई आदत",
+        "logHabit": "आदत दर्ज करें",
+        "streak": "लकीर",
+        "noHabits": "अभी तक कोई आदत ट्रैक नहीं की गई। अपनी पहली आदत बनाएं!",
+        "frequency": "आवृत्ति",
+        "daily": "रोजाना",
+        "weekly": "साप्ताहिक"
+    },
+    "goals": {
+        "newGoal": "नया लक्ष्य",
+        "progress": "प्रगति",
+        "dueDate": "लक्ष्य तिथि",
+        "noGoals": "अभी तक कोई लक्ष्य नहीं। अपना पहला लक्ष्य निर्धारित करें!",
+        "category": "श्रेणी",
+        "milestone": "मील का पत्थर"
+    },
+    "focus": {
+        "startSession": "फोकस सत्र शुरू करें",
+        "endSession": "सत्र समाप्त करें",
+        "timeRemaining": "शेष समय",
+        "breakTime": "ब्रेक लें",
+        "sessionsToday": "आज के सत्र",
+        "totalFocusTime": "कुल फोकस समय",
+        "deepWork": "गहन कार्य मोड"
+    },
+    "coach": {
+        "title": "LOS कोच",
+        "subtitle": "Gemini द्वारा संचालित",
+        "placeholder": "अपने कोच से कुछ भी पूछें...",
+        "thinking": "सोच रहा हूं...",
+        "greeting": "नमस्ते! मैं आपका LOS कोच हूं। मुझे आपके लक्ष्यों, कार्यों और आदतों का पूरा संदर्भ है। आज आप क्या अनुकूलित करना चाहते हैं?"
+    },
+    "pricing": {
+        "title": "अपनी वृद्धि में निवेश करें",
+        "subtitle": "हजारों उच्च-प्रदर्शनकारियों के साथ जुड़ें।",
+        "monthly": "/महीना",
+        "yearly": "/वर्ष",
+        "getStarted": "शुरू करें",
+        "processing": "प्रोसेस हो रहा है...",
+        "guarantee": "7 दिन की मनी-बैक गारंटी"
+    },
+    "auth": {
+        "signIn": "साइन इन",
+        "signUp": "साइन अप",
+        "email": "ईमेल",
+        "password": "पासवर्ड",
+        "forgotPassword": "पासवर्ड भूल गए?",
+        "noAccount": "खाता नहीं है?",
+        "haveAccount": "पहले से खाता है?"
+    },
+    "settings": {
+        "profile": "प्रोफ़ाइल",
+        "language": "भाषा",
+        "notifications": "सूचनाएं",
+        "privacy": "गोपनीयता",
+        "exportData": "मेरा डेटा निर्यात करें",
+        "deleteAccount": "खाता हटाएं",
+        "theme": "थीम",
+        "timezone": "समय क्षेत्र"
+    }
+}

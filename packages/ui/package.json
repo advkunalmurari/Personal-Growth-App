@@ -1,0 +1,13 @@
+{
+    "name": "@life-os/ui",
+    "version": "1.0.0",
+    "private": true,
+    "main": "index.ts",
+    "dependencies": {
+        "react": "^18",
+        "react-dom": "^18",
+        "lucide-react": "^0.577.0",
+        "tailwind-merge": "^3.5.0",
+        "clsx": "^2.1.1"
+    }
+}

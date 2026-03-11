@@ -1,0 +1,107 @@
+{
+    "name": "Life OS — Goal & Habit Tracker",
+    "short_name": "Life OS",
+    "description": "Turn your ambitions into daily wins. AI-powered goal tracking, habits, and productivity for students and professionals.",
+    "start_url": "/dashboard",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "theme_color": "#0B0F19",
+    "background_color": "#0B0F19",
+    "categories": [
+        "productivity",
+        "education",
+        "lifestyle"
+    ],
+    "lang": "en",
+    "dir": "ltr",
+    "icons": [
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-maskable.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshots/dashboard.png",
+            "sizes": "390x844",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Dashboard — Today's Plan"
+        },
+        {
+            "src": "/screenshots/goals.png",
+            "sizes": "390x844",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Goal Engine"
+        },
+        {
+            "src": "/screenshots/habits.png",
+            "sizes": "390x844",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Habit Tracker"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Add Task",
+            "short_name": "Add Task",
+            "description": "Quickly add a new task",
+            "url": "/dashboard?action=add-task",
+            "icons": [
+                {
+                    "src": "/icons/shortcut-add.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Start Focus",
+            "short_name": "Focus",
+            "description": "Enter deep work focus mode",
+            "url": "/focus",
+            "icons": [
+                {
+                    "src": "/icons/shortcut-focus.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Log Habit",
+            "short_name": "Habits",
+            "description": "Log today's habit",
+            "url": "/habits?action=log",
+            "icons": [
+                {
+                    "src": "/icons/shortcut-habit.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ],
+    "related_applications": [
+        {
+            "platform": "play",
+            "url": "https://play.google.com/store/apps/details?id=in.lifeos.app",
+            "id": "in.lifeos.app"
+        }
+    ],
+    "prefer_related_applications": false
+}

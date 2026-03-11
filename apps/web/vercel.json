@@ -1,0 +1,66 @@
+{
+    "version": 2,
+    "buildCommand": "cd ../.. && npx turbo run build --filter=web",
+    "outputDirectory": "apps/web/.next",
+    "installCommand": "npm ci",
+    "framework": "nextjs",
+    "regions": [
+        "bom1"
+    ],
+    "functions": {
+        "apps/web/src/app/api/**/*.ts": {
+            "maxDuration": 30,
+            "memory": 256
+        },
+        "apps/web/src/app/api/ai/**/*.ts": {
+            "maxDuration": 60,
+            "memory": 512
+        }
+    },
+    "headers": [
+        {
+            "source": "/api/(.*)",
+            "headers": [
+                {
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "https://app.life-os.in"
+                },
+                {
+                    "key": "Access-Control-Allow-Methods",
+                    "value": "GET,POST,PUT,DELETE,OPTIONS"
+                },
+                {
+                    "key": "Access-Control-Allow-Headers",
+                    "value": "Content-Type,Authorization"
+                }
+            ]
+        }
+    ],
+    "rewrites": [
+        {
+            "source": "/monitoring/(.*)",
+            "destination": "https://o0.ingest.sentry.io/$1"
+        }
+    ],
+    "redirects": [
+        {
+            "source": "/app",
+            "destination": "/dashboard",
+            "permanent": true
+        }
+    ],
+    "crons": [
+        {
+            "path": "/api/cron/weekly-score",
+            "schedule": "0 20 * * 0"
+        },
+        {
+            "path": "/api/cron/habit-reminders",
+            "schedule": "30 6 * * *"
+        },
+        {
+            "path": "/api/cron/badge-check",
+            "schedule": "0 0 * * *"
+        }
+    ]
+}

@@ -1,0 +1,561 @@
+
+LIFE OPERATING SYSTEM
+Master Build Prompt
+
+
+A precision engineering specification for an AI-powered personal execution engine
+
+Document Type
+AI Developer Build Prompt
+Design Philosophy
+Atomic Habits · Kaizen · Deep Work · Systems Thinking
+Target Tools
+Cursor · Replit AI · Lovable · Bolt · v0 · Windsurf
+Output
+Full-stack personal productivity application
+
+
+MISSION BRIEF
+Build a Life Operating System
+
+
+You are building a high-performance personal productivity application that functions as a Life Operating System (LOS). It converts long-term ambitions into daily measurable actions through goal hierarchies, automated task breakdown, habit tracking, and intelligent feedback loops.
+
+Core Engineering Insight
+People fail not because their goals are too big — but because their feedback loops are too weak. This system exists to manufacture constant, visible progress. Small daily steps. Relentless iteration. Compounding outcomes.
+
+SECTION 1
+Technology Stack
+
+
+Layer
+Technology
+Notes
+Frontend
+Next.js 14 (App Router) + Tailwind CSS
+React Server Components, TypeScript strict mode
+Backend
+Node.js with tRPC or Next.js API routes
+Type-safe end-to-end API contracts
+Database
+Supabase (PostgreSQL)
+Row-level security, real-time subscriptions
+Authentication
+Supabase Auth + Google OAuth
+JWT sessions, magic link fallback
+AI Engine
+Anthropic Claude API or OpenAI API
+Goal breakdown, coaching, bottleneck detection
+State Management
+Zustand + React Query (TanStack)
+Optimistic UI, background sync
+Charts
+Recharts or Nivo
+Progress bars, heatmaps, trend lines
+Deployment
+Vercel (frontend) + Supabase (backend)
+CI/CD via GitHub Actions
+
+
+SECTION 2
+Database Schema
+
+
+Design the PostgreSQL schema with the following core tables. All tables include created_at, updated_at timestamps and user_id foreign key for row-level security.
+
+2.1  users
+Column
+Type
+Constraints / Notes
+id
+uuid
+PRIMARY KEY, default gen_random_uuid()
+email
+text
+UNIQUE NOT NULL
+name
+text
+Display name
+timezone
+text
+e.g. 'Asia/Kolkata' — drives daily reset logic
+xp_total
+integer
+Gamification: total XP accumulated
+level
+integer
+Derived from xp_total — store for fast reads
+preferences
+jsonb
+Theme, default block durations, review time
+
+2.2  goals
+Column
+Type
+Constraints / Notes
+id
+uuid
+PRIMARY KEY
+user_id
+uuid
+FK → users.id
+parent_goal_id
+uuid
+FK → goals.id (self-referencing; NULL = root)
+title
+text
+NOT NULL
+level
+text
+ENUM: vision | yearly | half_yearly | quarterly | monthly | weekly | daily
+category
+text
+ENUM: study | business | health | skill | spiritual | personal
+status
+text
+ENUM: active | completed | paused | archived
+progress_pct
+numeric(5,2)
+0.00–100.00; auto-aggregated from children
+target_date
+date
+Deadline for this goal level
+velocity_status
+text
+ENUM: on_track | at_risk | behind — computed nightly
+
+2.3  tasks
+Column
+Type
+Constraints / Notes
+id
+uuid
+PRIMARY KEY
+goal_id
+uuid
+FK → goals.id (must link to a daily-level goal)
+title
+text
+NOT NULL
+priority
+text
+ENUM: P1 | P2 | P3 | P4 (P1 = critical)
+estimated_mins
+integer
+User or AI-estimated duration
+actual_mins
+integer
+Populated when task is marked complete
+status
+text
+ENUM: pending | in_progress | completed | delayed | skipped
+scheduled_date
+date
+Which day this task is assigned to
+time_block_id
+uuid
+FK → time_blocks.id (nullable)
+xp_value
+integer
+Computed: P1=40, P2=25, P3=15, P4=5
+completed_at
+timestamptz
+Null until completed — drives time-of-day analytics
+
+2.4  habits
+Column
+Type
+Constraints / Notes
+id
+uuid
+PRIMARY KEY
+user_id
+uuid
+FK → users.id
+name
+text
+e.g. 'Morning Chanting', 'Exercise', 'Reading'
+frequency
+text
+ENUM: daily | weekdays | custom (days stored in days_of_week)
+current_streak
+integer
+Consecutive completions — reset on miss
+longest_streak
+integer
+All-time record
+habit_logs
+(separate table)
+id, habit_id, completed_on (date), note
+
+2.5  Additional Tables
+Table
+Key Columns
+time_blocks
+id, user_id, date, start_time, end_time, block_type (enum), task_id (nullable), focus_score
+review_sessions
+id, user_id, type (daily/weekly/monthly), responses (jsonb), productivity_score, created_at
+badges
+id, user_id, badge_type (enum), earned_at, metadata (jsonb)
+ai_suggestions
+id, user_id, suggestion_type, content, accepted (bool), created_at
+focus_sessions
+id, task_id, started_at, ended_at, duration_mins, mode (pomodoro/freeform)
+
+
+SECTION 3
+Application Modules
+
+
+The application has 6 core modules. Each must be a distinct route or view. All modules share state via global store (Zustand). Build in this order.
+
+Module 1 — Life Dashboard  /dashboard
+The command center. Renders immediately on login. Zero loading states — all data must be pre-fetched via SSR or optimistic cache.
+
+Required Components
+	•	TodayPanel: Ordered list of today's tasks by priority (P1 first). Each task shows estimated time, category color, checkbox. Overdue tasks shown in red with a delay badge.
+	•	GoalProgressRail: Horizontal progress bars for all active goals. Color-coded: green ≥ 80%, amber 50–79%, red < 50%. Clicking a bar navigates to that goal's detail view.
+	•	HabitStreak Widget: Grid of today's habits. Tap to mark complete. Shows current streak count below each icon.
+	•	FocusTimer: Persistent timer widget. One-click to start a deep work session on the selected task. Persists across navigation.
+	•	WeeklyScoreCard: Current week's productivity score with delta from last week (↑/↓). Breakdown tooltip on hover.
+	•	DeadlineRadar: Next 7 days. Shows goals and tasks with approaching deadlines, color-coded by urgency.
+
+Layout Rule
+Responsive 3-column grid on desktop (tasks | goals + habits | score + deadlines). Single column on mobile. Dark mode default.
+
+Module 2 — Goal Hierarchy Engine  /goals
+The structural core of the entire system. Goals cascade across 7 levels. Every goal must be linked to a parent (except Vision).
+
+Goal Cascade Structure
+  VISION  (root, no parent)
+     └── YEARLY GOAL
+            └── HALF-YEARLY GOAL
+                   └── QUARTERLY GOAL
+                          └── MONTHLY MILESTONE
+                                 └── WEEKLY TARGET
+                                        └── DAILY TASKS  ← linked to tasks table
+
+Behavior Requirements
+	•	When a user creates a goal at any level, the system must prompt: 'Would you like to break this into [next level] targets?' If yes, open the AI breakdown modal.
+	•	Progress at the daily task level auto-aggregates upward. Completing 3 of 5 daily tasks = 60% on parent weekly goal. Weekly goals feed into monthly, and so on recursively.
+	•	Velocity status (on_track / at_risk / behind) is computed nightly via a cron job: compare current progress% against expected% given days elapsed vs. total days.
+	•	The UI must expose three views: Tree View (hierarchical expand/collapse), Kanban View (columns per status), Timeline View (Gantt-style with target dates).
+	•	Each goal card must display: title, category badge, progress bar, velocity indicator, target date, days remaining, and child goal count.
+
+Module 3 — Smart Task Breakdown Engine  /goals/:id/breakdown
+When a user inputs any goal or task, the AI engine suggests a structured decomposition. This is the primary AI touchpoint.
+
+AI Prompt Contract
+Send the following context to the AI API for each breakdown request:
+  System: You are a productivity coach. Given a goal, return a JSON array
+  of tasks with: title, category, estimatedMins, priority (P1-P4), phase
+  (study/practice/review/assess). Group into weeks if goal > 7 days.
+ 
+  User: Goal: '{goal_title}', Target date: '{date}', Available hours/day: {n}
+  Existing tasks for this goal: [{...}]
+  Return ONLY valid JSON. No markdown, no explanation.
+
+Default Duration Estimates by Category
+Category
+Default Duration
+Pomodoro Blocks
+Study / Revision
+90 minutes
+2 × 45 min
+Practice Questions
+60 minutes
+2 × 30 min
+Mock Exam / Assessment
+180 minutes
+1 × 180 min block
+Exercise
+45 minutes
+1 × 45 min
+Skill Development
+60 minutes
+2 × 30 min
+Business / Admin
+30 minutes
+1 × 30 min
+Spiritual Practice
+30 minutes
+1 × 30 min
+
+Module 4 — Time Blocking Scheduler  /schedule
+A day-view calendar with drag-and-drop task slots. The source of truth for what the user commits to doing and when.
+
+Functional Requirements
+	•	Render a full-day timeline (5 AM – 11 PM) in 30-minute increments. Pre-populate with the user's recurring block templates.
+	•	Task cards from the today list are draggable into any time slot. Snaps to 30-min boundaries. Minimum block size: 30 min.
+	•	Each time block stores: type, linked task_id (optional), start/end time, estimated_mins, and actual_mins (filled post-session).
+	•	At end of day, show a recap: planned hours vs. actual hours by block type. Render as stacked horizontal bar chart.
+	•	Week view must show block distribution per day as a compact heatmap — darker = more scheduled hours.
+
+Default Block Types & Colors
+Block Type
+Hex Color
+Icon Suggestion
+Deep Work
+#5B4FE8 (Indigo)
+🔵 Brain / Target
+Study
+#2196F3 (Blue)
+📘 Book
+Business
+#FF9800 (Amber)
+💼 Briefcase
+Exercise
+#34A853 (Green)
+🏃 Runner
+Skill Dev
+#00BCD4 (Teal)
+⚡ Lightning
+Spiritual
+#9C27B0 (Purple)
+🙏 Folded Hands
+Admin / Buffer
+#9E9E9E (Grey)
+📋 Clipboard
+
+Module 5 — Habit & Routine Tracker  /habits
+Track recurring habits with streak logic, completion heatmaps, and milestone alerts. Streaks are the primary motivation mechanic.
+
+Streak Rules
+	•	A habit is 'completed' for a day if marked done before midnight in the user's local timezone.
+	•	Missing one day resets the streak to 0. There is no grace period — this is intentional (builds discipline).
+	•	current_streak and longest_streak are maintained in the habits table and updated synchronously when a log is inserted.
+	•	Milestone alerts at 7, 14, 21, 30, 60, 100, 365 consecutive days. Trigger a badge award + XP bonus.
+
+Visualizations Required
+	•	GitHub-style contribution heatmap: 52-week × 7-day grid. Cell color intensity = number of habits completed that day. Tooltip shows date + completion count.
+	•	Weekly bar chart: For the last 8 weeks, show % of habits completed per week as stacked bars by habit.
+	•	Streak leaderboard: All habits sorted by current streak, descending. Shows name, streak, and record streak.
+
+Module 6 — Review & Feedback System  /review
+The most important module. Three automated review modes. Each generates a structured report stored in review_sessions.
+
+Daily Review  (triggered at user-set time, default: 9 PM)
+Prompt
+Data Source
+What did I complete today? (auto-populated checklist)
+tasks WHERE scheduled_date = today AND status = completed
+What was skipped or delayed? Why?
+tasks WHERE status IN (delayed, skipped)
+What distracted me most? (free text)
+Stored in review_sessions.responses jsonb
+What is tomorrow's single most important task? (P1 picker)
+Pre-populates tomorrow's P1 task
+Rate your focus today: 1–10 (slider)
+Stored; plotted in weekly analytics
+
+Weekly Review  (triggered every Sunday)
+Auto-generated report. No manual input required — system compiles and presents. User adds annotations.
+	•	Tasks completed vs. planned (count and %)
+	•	Goal progress delta: where each active goal stood Monday vs. Sunday
+	•	Habit success rate per habit (completions / scheduled days)
+	•	Productivity score breakdown (see Section 4)
+	•	AI-generated insight: one paragraph analyzing the week's patterns and suggesting one adjustment
+	•	Preview: 3 most important tasks auto-suggested for next Monday
+
+Monthly Review  (triggered on last day of month)
+	•	Goal completion % per category
+	•	Time allocation analysis: actual hours spent per block type (pie chart + table)
+	•	Trend analysis: is each goal's velocity improving or degrading?
+	•	AI generates a 'Month in Review' summary + top 3 recommendations for next month
+
+
+SECTION 4
+Scoring & Gamification
+
+
+4.1  Weekly Productivity Score
+Computed every Sunday at midnight. Stored in review_sessions. Displayed on dashboard as a number (0–100) with grade label.
+
+  Weekly Score = (Task Completion × 0.40)
+               + (Goal Progress   × 0.30)
+               + (Habit Consistency× 0.20)
+               + (Deep Work Hours  × 0.10)
+ 
+  Task Completion  = completed_tasks / scheduled_tasks × 100
+  Goal Progress    = avg(progress_delta) across active goals
+  Habit Consistency= avg(completion_rate) across active habits
+  Deep Work Hours  = min(actual_deep_work_hrs / target_hrs, 1) × 100
+ 
+  Grades:  90–100 = S (Elite) | 75–89 = A | 60–74 = B | 45–59 = C | <45 = D
+
+4.2  XP & Level System
+Action
+XP Awarded
+Complete a P1 task
++40 XP
+Complete a P2 task
++25 XP
+Complete a P3 task
++15 XP
+Complete a P4 task
++5 XP
+Habit streak milestone (7/30/100 days)
++100 / +300 / +1000 XP
+Complete daily review
++20 XP
+Complete weekly review
++50 XP
+Weekly score ≥ 90 (S Grade)
++200 XP bonus
+Complete a monthly goal ahead of schedule
++500 XP bonus
+
+4.3  Achievement Badges
+Badge
+Trigger Condition
+XP Bonus
+First Step
+Complete your first task
++10 XP
+Week 1
+7-day habit streak (any habit)
++100 XP
+30-Day Discipline
+30-day streak on any habit
++300 XP
+Deep Worker
+100 total deep work hours logged
++500 XP
+Consistent
+Weekly score ≥ 75 for 4 consecutive weeks
++400 XP
+Goal Crusher
+Complete a quarterly goal
++1000 XP
+Elite
+Weekly score ≥ 90 for 8 consecutive weeks
++2000 XP
+
+
+SECTION 5
+AI Productivity Coach
+
+
+The AI coach is a persistent sidebar assistant. It has read access to the user's full goal tree, task history, habit logs, and review sessions. It must provide contextual, actionable coaching — not generic advice.
+
+5.1  Trigger Conditions (Proactive)
+Trigger
+AI Action
+A weekly goal has < 20% progress with 3 days remaining
+Surface alert: 'Your Weekly Target X is at risk. Here is a 3-day catch-up plan.'
+User opens app with no tasks scheduled for today
+Auto-suggest top 3 tasks from pending backlog based on priority and deadlines.
+Weekly score drops > 15 points from previous week
+Trigger a check-in prompt: 'Your score dropped this week. Want to identify what blocked you?'
+Habit streak broken for a tracked habit
+Gentle re-commitment prompt the next morning with streak recovery messaging.
+Monthly goal < 40% complete at mid-month
+Rebalance suggestion: 'You need 3.2 hours/day for the rest of the month. Here is a revised schedule.'
+
+5.2  On-Demand Capabilities
+	•	'Break down this goal for me' → returns structured task tree with durations and phases
+	•	'Schedule my week' → given hours available per day, distributes pending tasks into time blocks
+	•	'What should I focus on today?' → ranks pending tasks by urgency × impact using priority + deadline proximity
+	•	'How am I doing?' → generates a natural-language summary of the user's current progress across all active goals
+	•	'I'm behind on X' → generates a specific catch-up plan with daily targets to close the gap before the deadline
+
+5.3  Context Window Passed to API
+  {
+    active_goals: [{id, title, level, progress_pct, target_date, velocity}],
+    today_tasks:  [{id, title, priority, status, estimated_mins}],
+    recent_habits: [{name, current_streak, last_7_days_completion}],
+    last_weekly_score: { score, task_pct, habit_pct, deep_work_hrs },
+    user_query: 'string'
+  }
+
+
+SECTION 6
+Focus Mode & Analytics
+
+
+6.1  Focus Mode  /focus
+Full-screen, distraction-free deep work environment. Single task displayed. All navigation hidden.
+	•	Mode: Pomodoro (25+5) or Custom (user sets work/break duration)
+	•	Task is pre-selected from the scheduler or chosen at session start
+	•	Session logged to focus_sessions on completion — not on exit
+	•	On session end: prompt for actual_mins, self-assessed focus quality (1–10), brief note
+	•	Ambient sound options: white noise, rain, binaural beats (use royalty-free CDN sources)
+	•	During session: keyboard shortcut (Esc) to pause; double-Esc to abandon
+
+6.2  Analytics Module  /analytics
+Insights panel. All charts use Recharts or Nivo. Data is date-range filterable (7d / 30d / 90d / custom).
+
+Chart Name
+Type
+What it shows
+Daily Focus Hours
+Line chart
+Total deep work hours per day (30-day rolling)
+Task Completion Rate
+Bar chart
+Completed / scheduled tasks per week
+Goal Velocity
+Multi-line chart
+Progress% over time per active goal
+Time Allocation
+Donut chart
+Actual hours by block type (month)
+Productive Time of Day
+Heatmap grid
+Hour × day of week, colored by completion rate
+Weekly Score Trend
+Area chart
+Score over the past 12 weeks with grade bands
+Habit Heatmap
+52×7 grid
+GitHub-style contribution map, all habits combined
+
+
+SECTION 7
+UX Rules & Build Order
+
+
+7.1  Non-Negotiable UX Rules
+	•	Zero perceived loading: Use optimistic UI everywhere. Update local state immediately on user action. Sync to server in background. Roll back on error.
+	•	Dark mode by default. Light mode toggle saved to users.preferences. Apply via CSS variables — never hard-coded colors.
+	•	Mobile-first layout. All views must be fully functional on a 375px viewport. Dashboard collapses to stacked single column.
+	•	Keyboard-first power user mode: Cmd+K opens command palette. Quick-add task via Cmd+T. Start focus mode via Cmd+F. Navigate modules via number keys 1–6.
+	•	All destructive actions (delete goal, clear habit log) must require two-step confirmation. No undo after confirmation.
+	•	Every data-heavy page must have an empty state that guides the user. No blank white screens.
+
+7.2  Recommended Build Order
+Build in this sequence to ship a usable product at each milestone:
+
+Sprint
+Deliverable
+Must-Have For Launch
+Sprint 1
+Auth, database schema, basic goal CRUD, goal hierarchy tree view
+Yes — core data layer
+Sprint 2
+Task creation, daily task list, task completion with XP
+Yes — daily workflow
+Sprint 3
+Habit tracker, streak logic, heatmap visualization
+Yes — core loop
+Sprint 4
+Life Dashboard assembly, progress bars, weekly score
+Yes — MVP complete
+Sprint 5
+Time blocking scheduler with drag-and-drop
+Recommended
+Sprint 6
+Review system (daily + weekly), review report generation
+Recommended
+Sprint 7
+AI coach integration, proactive alerts, goal breakdown
+V2 feature
+Sprint 8
+Focus mode, analytics dashboard, gamification badges
+V2 feature
+
+
+
+The Core Principle
+This system is not a to-do app. It is a trajectory management engine. The goal is not to schedule perfectly — schedules break. The goal is to create feedback loops so tight that deviation from your goals becomes immediately visible and immediately correctable. Build that, and the outcomes take care of themselves.
+
