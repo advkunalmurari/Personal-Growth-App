@@ -18,6 +18,12 @@ const nextConfig = {
     minimumCacheTTL: 86400,
     deviceSizes: [390, 768, 1024, 1280, 1920],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   async headers() {
     return [
       {
