@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Plus, Target, Activity } from 'lucide-react'
+import { Plus, Target } from 'lucide-react'
 import { useGoalStore } from '@/stores/goalStore'
 import GoalTree from '@/components/goals/GoalTree'
 import CreateGoalModal from '@/components/goals/CreateGoalModal'

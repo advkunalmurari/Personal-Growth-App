@@ -12,7 +12,6 @@ export async function GET(req: NextRequest) {
 
     if (action === 'callback') {
         const code = searchParams.get('code')
-        const state = searchParams.get('state')
 
         if (!code) return NextResponse.redirect(`/?error=no_code`)
 
@@ -66,7 +65,7 @@ export async function GET(req: NextRequest) {
 }
 
 // ─── POST: Sync schedule blocks to Google Calendar ───────────────────────────
-export async function POST(req: NextRequest) {
+export async function POST() {
     try {
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()

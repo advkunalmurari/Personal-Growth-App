@@ -66,7 +66,7 @@ export default function ConsentBanner() {
                         <h2 className="text-white font-semibold text-sm">Your privacy matters 🔒</h2>
                         <p className="text-slate-400 text-xs mt-1 leading-relaxed">
                             We use cookies to improve your experience, analyze performance, and personalize content.
-                            Compliant with India's DPDP Act 2023 and GDPR.{' '}
+                            Compliant with India&apos;s DPDP Act 2023 and GDPR.{' '}
                             <a href="/privacy" className="text-indigo-400 underline">Read our Privacy Policy</a>.
                         </p>
 

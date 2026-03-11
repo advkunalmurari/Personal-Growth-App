@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { CheckCircle, User, Briefcase, GraduationCap, Mic, Loader2 } from 'lucide-react'
+import { CheckCircle, User, Briefcase, GraduationCap, Loader2 } from 'lucide-react'
 
 type ProfileType = 'student' | 'professional' | 'other'
 type Step = 1 | 2 | 3 | 4 | 5
@@ -227,7 +227,7 @@ export default function OnboardingPage() {
                                     onClick={() => setStep(4)}
                                     className="w-full py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition-all"
                                 >
-                                    Perfect, let's go →
+                                    Perfect, let&apos;s go →
                                 </button>
                             </>
                         )}
@@ -271,7 +271,7 @@ export default function OnboardingPage() {
                             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-indigo-500/30">
                                 <CheckCircle className="w-12 h-12 text-white" />
                             </div>
-                            <h1 className="text-3xl font-bold text-white mb-2">You're in! 🚀</h1>
+                            <h1 className="text-3xl font-bold text-white mb-2">You&apos;re in! 🚀</h1>
                             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-600/20 border border-indigo-500/30 mb-4">
                                 <span className="text-indigo-300 font-bold">+40 XP</span>
                                 <span className="text-slate-400 text-sm">· Day 1 Streak! 🔥</span>

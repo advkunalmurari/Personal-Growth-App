@@ -1,5 +1,4 @@
 import { Skeleton } from "@/components/ui/skeleton"
-import { Target, Activity, Zap, TrendingUp, Flame } from "lucide-react"
 
 export default function DashboardSkeleton() {
     return (
