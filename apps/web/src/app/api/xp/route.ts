@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+
+export const dynamic = 'force-dynamic'
 import { rateLimit } from '@/lib/rate-limit'
 import { validateBody, schemas } from '@/lib/validation'
 

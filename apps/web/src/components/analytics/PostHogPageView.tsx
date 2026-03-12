@@ -9,7 +9,7 @@ function PostHogPageViewFallback() {
     return null
 }
 
-export default function PostHogPageView() {
+function PostHogPageViewContent() {
     const pathname = usePathname()
     const searchParams = useSearchParams()
     const posthog = usePostHog()
@@ -26,5 +26,13 @@ export default function PostHogPageView() {
         }
     }, [pathname, searchParams, posthog])
 
-    return <Suspense fallback={<PostHogPageViewFallback />} />
+    return null
+}
+
+export default function PostHogPageView() {
+    return (
+        <Suspense fallback={null}>
+            <PostHogPageViewContent />
+        </Suspense>
+    )
 }

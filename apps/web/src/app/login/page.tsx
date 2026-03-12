@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Eye, EyeOff, Mail, Lock, AlertCircle, CheckCircle2 } from 'lucide-react'
 
 type View = 'signin' | 'signup' | 'forgot'
 
-export default function LoginPage() {
+function LoginForm() {
     const [view, setView]         = useState<View>('signin')
     const [email, setEmail]       = useState('')
     const [password, setPassword] = useState('')
@@ -19,6 +19,7 @@ export default function LoginPage() {
     const router       = useRouter()
     const searchParams = useSearchParams()
     const supabase     = createClient()
+// ... rest of the component ...
 
     // Show OAuth error if redirected back from /auth/callback with error
     useEffect(() => {
@@ -281,5 +282,13 @@ export default function LoginPage() {
 
             </div>
         </div>
+    )
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-gray-950 flex items-center justify-center text-gray-500">Loading...</div>}>
+            <LoginForm />
+        </Suspense>
     )
 }

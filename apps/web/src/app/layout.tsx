@@ -22,12 +22,15 @@ export function generateMetadata(): Metadata {
     title: "Life OS - Your Personal Growth Partner",
     description: "Your ultimate personal growth and productivity system.",
     manifest: "/manifest.json",
-    themeColor: "#000000",
     other: {
       ...Sentry.getTraceData()
     }
   };
 }
+
+export const viewport = {
+  themeColor: "#000000",
+};
 
 export default function RootLayout({
   children,

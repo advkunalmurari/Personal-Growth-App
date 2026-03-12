@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
+export const dynamic = 'force-dynamic'
+
 // POST /api/cron/badge-check
 // Runs every day at midnight via Vercel cron
 // Awards badges to users who have newly qualified
-
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-)
 
 interface BadgeRule {
     key: string
@@ -40,6 +37,11 @@ const BADGE_RULES: BadgeRule[] = [
 ]
 
 export async function POST(req: NextRequest) {
+    const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    )
+
     const authHeader = req.headers.get('Authorization')
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -52,7 +54,7 @@ export async function POST(req: NextRequest) {
 
     if (!badges) return NextResponse.json({ awarded: 0 })
 
-    const badgeMap = Object.fromEntries(badges.map(b => [b.badge_key, b.id]))
+    const badgeMap = Object.fromEntries((badges || []).map((b: any) => [b.badge_key, b.id]))
 
     // Get all users with their stats via a single view/RPC call
     const { data: users } = await supabase.rpc('get_user_badge_stats')

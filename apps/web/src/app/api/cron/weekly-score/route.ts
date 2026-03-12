@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 // POST /api/cron/weekly-score
 // Runs every Sunday at 8:00 PM IST (UTC 14:30) via Vercel cron
 // Calculates and stores weekly_scores for ALL active users

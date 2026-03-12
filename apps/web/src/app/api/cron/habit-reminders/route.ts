@@ -1,16 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
+export const dynamic = 'force-dynamic'
+
 // POST /api/cron/habit-reminders
 // Runs every day at 6:30 AM IST (UTC 01:00)
 // Sends push notification reminders to users who haven't logged habits yet
 
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!, // service role — bypasses RLS
-)
-
 export async function POST(req: NextRequest) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    if (!url || !key) {
+        return NextResponse.json({ error: 'Environment variables missing' }, { status: 500 })
+    }
+
+    const supabase = createClient(
+        url,
+        key, // service role — bypasses RLS
+    )
+
     const authHeader = req.headers.get('Authorization')
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

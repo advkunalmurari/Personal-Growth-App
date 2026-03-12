@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AICoach from '@/components/ai/AICoach'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AuthenticatedLayout({
     children,
 }: {

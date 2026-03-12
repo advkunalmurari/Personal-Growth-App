@@ -3,10 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 
-const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID || '',
-    key_secret: process.env.RAZORPAY_KEY_SECRET || '',
-})
+export const dynamic = 'force-dynamic'
 
 // ─── Plans ────────────────────────────────────────────────────────────────────
 const PLANS: Record<string, { amount: number; currency: string; name: string; period: string }> = {
@@ -15,8 +12,12 @@ const PLANS: Record<string, { amount: number; currency: string; name: string; pe
     team_monthly: { amount: 199900, currency: 'INR', name: 'Life OS Team (Monthly)', period: 'monthly' }, // ₹1,999
 }
 
-// ─── POST /api/checkout - Create Order ───────────────────────────────────────
 export async function POST(req: NextRequest) {
+    const razorpay = new Razorpay({
+        key_id: process.env.RAZORPAY_KEY_ID || '',
+        key_secret: process.env.RAZORPAY_KEY_SECRET || '',
+    })
+
     try {
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()

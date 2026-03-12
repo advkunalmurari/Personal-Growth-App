@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { rateLimit } from '@/lib/rate-limit'
+
+export const dynamic = 'force-dynamic'
 import { routeAI, type AITask } from '@/lib/ai/deepseek'
 import {
     goalCascadePrompt, GOAL_CASCADE_SYSTEM,

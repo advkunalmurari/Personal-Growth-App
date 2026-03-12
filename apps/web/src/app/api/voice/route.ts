@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
+export const dynamic = 'force-dynamic'
 
 export async function POST(req: NextRequest) {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
     try {
         const formData = await req.formData()
         const file = formData.get('audio') as File | null
@@ -58,8 +59,3 @@ export async function POST(req: NextRequest) {
     }
 }
 
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-}

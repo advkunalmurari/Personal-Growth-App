@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/widget-data?userId=... - Provides lightweight data for home screen widgets
 export async function GET(req: NextRequest) {
     try {
