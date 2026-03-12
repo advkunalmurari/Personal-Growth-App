@@ -8,11 +8,11 @@
         "bom1"
     ],
     "functions": {
-        "apps/web/src/app/api/**/*.ts": {
+        "src/app/api/**/*.ts": {
             "maxDuration": 30,
             "memory": 256
         },
-        "apps/web/src/app/api/ai/**/*.ts": {
+        "src/app/api/ai/**/*.ts": {
             "maxDuration": 60,
             "memory": 512
         }
